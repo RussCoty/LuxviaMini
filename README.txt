@@ -13,3 +13,6 @@ Replace the WindowGroup content with one of these:
     EulogyDevRootView()
 
 Then clean build (Shift+Cmd+K) and build again.
+
+
+Hello
