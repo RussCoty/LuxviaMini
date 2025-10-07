@@ -9,7 +9,8 @@ struct ModelTestView: View {
     @State private var errorMessage: String = ""
 
     var body: some View {
-        VStack(spacing: 20) {
+        print("ModelTestView loaded")
+        return VStack(spacing: 20) {
             Text("LuxviaMini • Model Test")
                 .font(.title).bold()
 
@@ -21,6 +22,7 @@ struct ModelTestView: View {
                 .buttonStyle(.borderedProminent)
 
             if !predictedLabel.isEmpty {
+                print("Displaying prediction: \(predictedLabel), confidence: \(String(describing: confidence))")
                 VStack(spacing: 6) {
                     Text("Predicted Label:")
                         .font(.headline)
@@ -62,11 +64,13 @@ struct ModelTestView: View {
 
     // MARK: - Prediction
     func runPrediction() {
+        print("runPrediction called with input: \(input)")
         do {
             let model = try LuxSlotClassifier(configuration: MLModelConfiguration())
             let result = try model.prediction(text: input)
 
             predictedLabel = result.label
+            print("Predicted label: \(predictedLabel)")
 
             let probKeys = ["labelProbability", "labelProbabilities", "classLabelProbs"]
             var bestConf: Double? = nil
@@ -78,6 +82,7 @@ struct ModelTestView: View {
                     for (k, v) in fv.dictionaryValue {
                         if let kStr = k as? String {
                             tmp[kStr] = v.doubleValue
+                            print("Prob: \(kStr) = \(v.doubleValue)")
                         }
                     }
                     if !tmp.isEmpty {
@@ -102,6 +107,7 @@ struct ModelTestView: View {
             confidence = nil
             topProbs = []
             errorMessage = "Error running model: \(error.localizedDescription)"
+            print("Prediction error: \(errorMessage)")
         }
     }
 }

@@ -2,7 +2,8 @@ import SwiftUI
 
 struct EulogyRootView: View {
     var body: some View {
-        EulogyChatView()
+        print("EulogyRootView loaded")
+        return EulogyChatView()
     }
 }
 

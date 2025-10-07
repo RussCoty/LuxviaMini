@@ -12,12 +12,14 @@ final class EulogyChatEngine: ObservableObject {
     private let classifier: LuxSlotClassifier
 
     init(generator: EulogyGenerator = TemplateGenerator()) {
+        print("EulogyChatEngine initialized")
         self.generator = generator
         self.classifier = try! LuxSlotClassifier(configuration: MLModelConfiguration())
         start()
     }
 
     func start() {
+        print("EulogyChatEngine.start called")
         messages = [
             .init(role: .assistant, text:
 """
@@ -30,12 +32,14 @@ You can also tell me anything that feels important — personality, hobbies, a s
     }
 
     func send(_ text: String) {
+        print("send called with text: \(text)")
         guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
         messages.append(.init(role: .user, text: text))
         Task { await handle(text) }
     }
 
     private func handle(_ text: String) async {
+        print("handle called with text: \(text)")
         isThinking = true
         defer { isThinking = false }
 
@@ -44,6 +48,7 @@ You can also tell me anything that feels important — personality, hobbies, a s
         do {
             let res = try classifier.prediction(text: text)
             label = res.label
+            print("Classifier label: \(label)")
             let probKeys = ["labelProbability", "labelProbabilities", "classLabelProbs"]
             outer: for key in probKeys {
                 if let fv = res.featureValue(for: key) {

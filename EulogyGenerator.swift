@@ -6,6 +6,7 @@ protocol EulogyGenerator {
 
 final class TemplateGenerator: EulogyGenerator {
     func generate(from f: EulogyForm) async throws -> String {
+        print("TemplateGenerator.generate called with form: \(f)")
         let name = f.subjectName ?? "your loved one"
         let rel = f.relationship ?? "loved one"
 
@@ -20,6 +21,7 @@ final class TemplateGenerator: EulogyGenerator {
         func para(_ s: String) -> String { s.trimmingCharacters(in: .whitespacesAndNewlines) + "\n\n" }
 
         let opening: String = {
+            print("Generating opening paragraph with tone: \(f.tone)")
             switch f.tone {
             case .solemn: return "We gather today to honour the life of \(name), a cherished \(rel) whose presence shaped our days in quiet, meaningful ways."
             case .warm: return "Today we celebrate \(name) — a beloved \(rel) remembered for warmth, kindness, and the little moments that meant the most."
@@ -40,6 +42,7 @@ final class TemplateGenerator: EulogyGenerator {
             : ""
 
         let closing: String = {
+            print("Generating closing paragraph with tone: \(f.tone)")
             switch f.tone {
             case .solemn:
                 return "Though grief is deep, love is deeper. We say goodbye with gratitude, carrying \(name)’s memory gently into tomorrow."

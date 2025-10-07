@@ -6,16 +6,19 @@ struct EulogyChatView: View {
     @State private var isSending = false
 
     var body: some View {
-        VStack(spacing: 0) {
+        print("EulogyChatView rendered, messages count: \(engine.messages.count)")
+        return VStack(spacing: 0) {
             header
             ScrollViewReader { proxy in
                 ScrollView {
                     LazyVStack(spacing: 12) {
                         ForEach(engine.messages) { msg in
+                            print("Rendering message bubble for id: \(msg.id)")
                             MessageBubble(message: msg)
                                 .id(msg.id)
                         }
                         if engine.isThinking {
+                            print("Assistant is thinking...")
                             TypingBubble()
                         }
                     }
@@ -23,6 +26,7 @@ struct EulogyChatView: View {
                     .padding(.vertical, 16)
                 }
                 .onChange(of: engine.messages) { _ in
+                    print("Messages changed, total: \(engine.messages.count)")
                     if let last = engine.messages.last { withAnimation { proxy.scrollTo(last.id, anchor: .bottom) } }
                 }
             }
